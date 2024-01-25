@@ -2,6 +2,8 @@ import sys
 #sys.path.append('/home/ytabei/prog/python-venv/lib/python3.10/site-packages/')
 sys.path.append('/Users/yt/Prog/python/torch_venv/lib/python3.11/site-packages/')
 
+import copy
+
 import time
 import argparse
 import pickle
@@ -25,7 +27,7 @@ from transformers import get_linear_schedule_with_warmup
 
 import torch.nn.functional as F
 
-def train_model(model, train_data_iter, query_data_iter, epochs=2000, batch_size=4000):
+def train_model(model, train_data_iter, epochs=2000, batch_size=4000):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("device : " + str(device))
     
@@ -65,12 +67,15 @@ def train_model(model, train_data_iter, query_data_iter, epochs=2000, batch_size
         
         if best_loss > train_loss:
             best_loss = train_loss
-            best_model = model
+            best_model = copy.deepcopy(model)
             iter = 0
         elif iter == 5:
+            model = best_model
             iter = 0
         else:
             iter += 1
+
+    model = best_model
 
 
 def main():
@@ -92,6 +97,8 @@ def main():
     print("num_layers_gate:", args.num_layers_gate)
     print("hidden_dim:", args.hidden_dim)
     print("heads:", args.heads)
+    print("epochs:", args.epochs)
+    print("batch_size:", args.batch_size)
 
     cids, data_list, token_to_id, id_to_token, max_node_label, max_edge_label = load_data_from_json(args.input_file)
     input_dim, output_dim, seq_len = get_model_parameters(data_list)

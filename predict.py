@@ -79,7 +79,6 @@ def main():
 
     dataloader = DataLoader(query_list, batch_size=1, shuffle=False)
 
-
     total_time = 0.0
     iter = 0
     with open(args.output_file, "w") as file:
@@ -92,8 +91,10 @@ def main():
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
             sample_graph = batch_data.to(device)
 
-            pred_seq = predict_sequence(model, sample_graph, seq_len)
+            x, edge_index, batch = sample_graph.x, sample_graph.edge_index, sample_graph.batch
 
+            pred_seq = predict_sequence(model, x, edge_index, batch)
+            
             print("qcid: ", qcid)
             pred_seq_cpu = pred_seq.to('cpu')
             token = ''
