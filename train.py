@@ -1,6 +1,8 @@
 import sys
 #sys.path.append('/home/ytabei/prog/python-venv/lib/python3.10/site-packages/')
-sys.path.append('/Users/yt/Prog/python/torch_venv/lib/python3.11/site-packages/')
+#sys.path.append('/Users/yt/Prog/python/torch_venv/lib/python3.11/site-packages/')
+sys.path.append('/home/ytabei/prog/python-venv/lib/python3.10/site-packages/')
+
 
 import copy
 
@@ -32,6 +34,8 @@ def train_model(model, train_data_iter, epochs=2000, batch_size=4000):
     print("device : " + str(device))
     
     model = model.to(device)
+
+    model.train()
     
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
@@ -54,9 +58,9 @@ def train_model(model, train_data_iter, epochs=2000, batch_size=4000):
     dataloader = DataLoader(train_data_iter, batch_size=batch_size, shuffle=True)
 
 
-    iter = 0
-    best_model = model
-    best_loss = 100000
+#    iter = 0
+#    best_model = model
+#    best_loss = 100000
     for epoch in range(epochs):
         train_loss = train(model, dataloader, scheduler, optimizer, criterion)
 #        query_loss = evaluate(model, query_data_iter, criterion)
@@ -65,17 +69,16 @@ def train_model(model, train_data_iter, epochs=2000, batch_size=4000):
 
 #        generate_test_topk(model, train_data_iter)
         
-        if best_loss > train_loss:
-            best_loss = train_loss
-            best_model = copy.deepcopy(model)
-            iter = 0
-        elif iter == 5:
-            model = best_model
-            iter = 0
-        else:
-            iter += 1
-
-    model = best_model
+#        if best_loss > train_loss:
+#            best_loss = train_loss
+#            best_model = model
+#            iter = 0
+#        elif iter == 10:
+##            model = best_model
+#            iter = 0
+#        else:
+#            iter += 1
+#    model = best_model
 
 
 def main():

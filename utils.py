@@ -31,7 +31,7 @@ def train(model, dataloader, scheduler, optimizer, criterion):
     alpha = 0.9  # 適宜調整
     weights = torch.tensor([alpha ** t for t in range(max_sequence_length)], dtype=torch.float32)
     
-    model.train()
+#    model.train()
     seq_len = 7
     total_loss = 0.0
 #    for batch_data in tqdm(dataloader):
