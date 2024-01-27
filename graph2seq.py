@@ -140,7 +140,7 @@ class TransformerSequenceDecoder(nn.Module):
         self.nhead = nhead
         self.embedding = TokenEmbedding(output_dim, hidden_dim)
         self.pos_encoder = PositionalEncoding(hidden_dim, dropout=0.1)
-        self.transformer_decoder_layer = nn.TransformerDecoderLayer(d_model=hidden_dim, nhead=nhead)
+        self.transformer_decoder_layer = nn.TransformerDecoderLayer(d_model=hidden_dim, nhead=nhead, dim_feedforward=d_model*2, dropout=0.0)
         self.transformer_decoder = nn.TransformerDecoder(self.transformer_decoder_layer, num_layers=num_layers)
         self.fc_out = nn.Linear(hidden_dim, output_dim)
 
